@@ -13,55 +13,63 @@ import {
 import React, {useEffect, useState} from 'react';
 // import {deviceHeight, deviceWidth} from './Dimensions';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {DrawerActions} from '@react-navigation/native';
 import Card from '../components/Card';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
 const Home = props => {
+  const navigation = useNavigation();
   const [city, setCity] = useState('');
-  const [locationData, setLocationData] = useState(null);
+  const [locationData, setLocationData] = useState({});
 
-  //   const handleLocationPress = () => {
-  //     const mapUrl = 'geo:0,0?q=Current+Location';
-  //     Linking.openURL(mapUrl).catch(error =>
-  //       console.error('Error opening Google Maps:', error),
-  //     );
-  //   };
-  const handleLocationPress = () => {
-    if (locationData) {
-      // Use the latitude and longitude from Firestore for the map URL
-      const mapUrl = `geo:${locationData.latitude},${locationData.longitude}?q=Current+Location`;
-
-      Linking.openURL(mapUrl).catch(error =>
-        console.error('Error opening Google Maps:', error),
-      );
-    } else {
-      // Handle the case when location data is not available
-      console.warn('Location data not available');
-    }
+  const openDrawer = () => {
+    props.navigation.dispatch(DrawerActions.openDrawer());
   };
 
-  useEffect(() => {
-    // Fetch location data from Firestore when the component mounts
-    fetchLocationFromFirestore();
-  }, []);
-
   const fetchLocationFromFirestore = async () => {
-    try {
-      // Assuming the user is already authenticated and you have some identifier (e.g., uid)
-      const currentUser = auth().currentUser; // replace with your actual user identifier
+    // try {
+    //   // Assuming the user is already authenticated and you have some identifier (e.g., uid)
+    //   const currentUser = auth().currentUser; // replace with your actual user identifier
 
+    //   const userDoc = await firestore()
+    //     .collection('Partners')
+    //     .doc(currentUser.uid)
+    //     .get();
+    //   if (userDoc.exists) {
+    //     const userData = userDoc.data();
+    //     const userLocation = userData.location;
+    //     setLocationData(userLocation);
+    //   }
+    // } catch (error) {
+    //   console.error('Error fetching location from Firestore:', error);
+    // }
+    try {
+      const currentUser = auth().currentUser;
       const userDoc = await firestore()
         .collection('Partners')
         .doc(currentUser.uid)
         .get();
+
       if (userDoc.exists) {
         const userData = userDoc.data();
-        const userLocation = userData.location;
-        setLocationData(userLocation);
+        const {latitude, longitude} = userData.location;
+
+        const address = `${latitude}, ${longitude}`;
+        const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+
+        // Open Google Maps using Linking
+        Linking.openURL(url).catch(err =>
+          console.error('Error opening Google Maps:', err),
+        );
+
+        // setRedirectAddress(address);
+      } else {
+        console.warn('User document not found');
       }
     } catch (error) {
       console.error('Error fetching location from Firestore:', error);
@@ -111,11 +119,16 @@ const Home = props => {
             alignItems: 'center',
             width: deviceWidth - 20,
           }}>
-          <Icon name="menu" size={46} color="white" />
-          <Image
-            source={require('../assests/images/user.jpg')}
-            style={{height: 46, width: 46, borderRadius: 50}}
-          />
+          <TouchableOpacity onPress={openDrawer}>
+            <Icon name="menu" size={46} color="white" />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <Image
+              source={require('../assests/images/user.jpg')}
+              style={{height: 46, width: 46, borderRadius: 50}}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={{paddingHorizontal: 20, marginTop: 100}}>
@@ -162,7 +175,7 @@ const Home = props => {
                 My Locations
               </Text>
             </View>
-            <TouchableOpacity onPress={handleLocationPress}>
+            <TouchableOpacity onPress={fetchLocationFromFirestore}>
               <Icon name="location" size={25} color="white" />
             </TouchableOpacity>
           </View>

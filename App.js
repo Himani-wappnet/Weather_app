@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -7,7 +7,14 @@ import Details from './src/screens/Details';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import SignupwithGmail from './src/Authentications/SignupwithGmail';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Profile from './src/screens/Profile';
+import Logout from './src/Authentications/Logout';
 
+const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -41,6 +48,45 @@ const App = () => {
     }
   }
 
+  const MyDrawer = () => {
+    return (
+      <Drawer.Navigator
+        screenOptions={{
+          headerShown: false,
+          // drawerActiveBackgroundColor: '#F4CFE0',
+          drawerLabelStyle: {
+            color: '#000000',
+            fontWeight: '500',
+            fontSize: 17,
+            left: -13,
+          },
+          drawerStyle: {borderTopRightRadius: 20},
+        }}>
+        <Drawer.Screen
+          options={{
+            headerShown: false,
+            drawerIcon: () => {
+              return <Icon name="menu" size={35} color="#000" />;
+            },
+          }}
+          name="Home"
+          component={Home}
+        />
+        <Drawer.Screen
+          options={{
+            headerShown: false,
+            drawerIcon: () => {
+              return <MaterialIcons name="logout" size={35} color="#000" />;
+            },
+          }}
+          name="Logout"
+          component={Logout}
+        />
+        {/* Other screens for the Drawer navigator */}
+      </Drawer.Navigator>
+    );
+  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -53,8 +99,9 @@ const App = () => {
           </>
         ) : (
           <>
-            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="MyDrawer" component={MyDrawer} />
             <Stack.Screen name="Details" component={Details} />
+            <Stack.Screen name="Profile" component={Profile} />
           </>
         )}
       </Stack.Navigator>

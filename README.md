@@ -11,6 +11,7 @@ The Weather App is a React Native mobile application that provides real-time wea
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
+- [Logout](#logout)
 - [Dependencies](#dependencies)
 - [Project Description](#project-description)
 - [Steps Performed](#steps-performed)
@@ -72,10 +73,20 @@ Make sure you have the following installed on your machine:
 - Enter the location you want to check the weather for.
 - View current weather conditions and forecasts.
 
+## Logout
+
+To log out of the Weather App, follow these steps:
+
+1. Open the app.
+2. Click the Drawer menu icon
+3. Find the "Logout" option.
+4. Click on "Logout" to sign out of the application.
+
 ## Dependencies
 
 - React Native
-- Redux
+- Firebase
+- Firestore
 - Axios
 - etc.
 
