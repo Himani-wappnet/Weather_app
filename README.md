@@ -15,6 +15,7 @@ The Weather App is a React Native mobile application that provides real-time wea
 - [Dependencies](#dependencies)
 - [Project Description](#project-description)
 - [Steps Performed](#steps-performed)
+- [EditProfile Screen](#editprofile-screen)
 - [ChatGPT](#chatgpt)
 - [License](#license)
 
@@ -106,6 +107,15 @@ The development process included the following steps:
 6. Designed and implemented the home screen to display weather information.
 7. Used Redux for state management.
 8. Created a README.md file with installation steps and project information.
+
+## EditProfile Screen
+
+The `EditProfile` screen was implemented with the following features:
+
+- Updated user profile image with permission handling.
+- Utilized Firebase storage to store and retrieve user profile images.
+- Displayed an alert message on successful image update.
+- Navigated to the homepage after updating the profile image.
 
 ## ChatGPT
 

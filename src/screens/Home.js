@@ -18,11 +18,14 @@ import Card from '../components/Card';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
 const Home = props => {
+  const route = useRoute();
+  const {updatedImageURL} = route.params || {};
   const navigation = useNavigation();
   const [city, setCity] = useState('');
   const [locationData, setLocationData] = useState({});
@@ -125,7 +128,11 @@ const Home = props => {
 
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image
-              source={require('../assests/images/user.jpg')}
+              source={
+                updatedImageURL
+                  ? {uri: updatedImageURL}
+                  : require('../assests/images/user.jpg')
+              }
               style={{height: 46, width: 46, borderRadius: 50}}
             />
           </TouchableOpacity>

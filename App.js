@@ -95,13 +95,13 @@ const App = () => {
         }}>
         {!authState ? (
           <>
-            <Stack.Screen name="SignupwithGmail" component={SignupwithGmail} />
-          </>
-        ) : (
-          <>
             <Stack.Screen name="MyDrawer" component={MyDrawer} />
             <Stack.Screen name="Details" component={Details} />
             <Stack.Screen name="Profile" component={Profile} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="SignupwithGmail" component={SignupwithGmail} />
           </>
         )}
       </Stack.Navigator>
